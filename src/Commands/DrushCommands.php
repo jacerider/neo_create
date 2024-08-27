@@ -76,7 +76,7 @@ class DrushCommands extends CoreCommands {
     // Phase 1 Commands.
     $color = $this->io()->ask('What is your primary HEX color? (Default: #2780e3)', '#2780e3');
     $commands = [];
-    $commands[] = 'composer config --json \'{"minimum-stability":"dev"}\'';
+    $commands[] = 'composer config minimum-stability dev';
     $commands[] = 'composer require ' . implode(' ', $composerRequire);
     $commands[] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require augustash/vscode-drupal && composer vscode-setup -- --color=' . $color;
     foreach ($commands as $command) {
@@ -148,6 +148,11 @@ class DrushCommands extends CoreCommands {
     catch (\Error $e) {
       $this->io->error('<error>' . $e->getMessage() . '</error>');
     }
+
+    $shell = Drush::shell('drush pmu neo_create', $this->getRoot());
+    $shell->run();
+    $shell = Drush::shell('composer remove jacerider/neo_create', $this->getRoot());
+    $shell->run();
   }
 
   /**
