@@ -196,6 +196,8 @@ class DrushCommands extends CoreCommands {
     $shell = Drush::shell('composer remove jacerider/neo_create', $this->getRoot());
     $shell->run();
 
+    $this->io->success('If using VScode, please visit your extentions tab and enable both the "Drupal Extension Pack" and "Drupal Neo Extention Pack".');
+
     $this->io->success('Success! To enter DEV mode run "npm start".');
   }
 
