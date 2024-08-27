@@ -1,0 +1,6 @@
+services:
+  neo_create:
+    class: Drupal\neo_create\Commands\DrushCommands
+    arguments: ['%app.root%']
+    tags:
+      - { name: drush.command }

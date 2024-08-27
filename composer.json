@@ -1,0 +1,22 @@
+{
+  "name": "jacerider/neo_create",
+  "description": "Provides quick install of Neo suite of modules and themes.",
+  "type": "drupal-module",
+  "license": "proprietary",
+  "homepage": "https://github.com/jacerider/neo_create",
+  "authors": [
+    {
+      "name": "Cyle Carlson (JaceRider)",
+      "email": "jacerider@gmail.com",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/jacerider/neo_create/issues",
+    "source": "https://github.com/jacerider/neo_create"
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "^10.3"
+  }
+}
