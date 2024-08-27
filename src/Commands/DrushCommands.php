@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\neo_init\Commands;
+namespace Drupal\neo_create\Commands;
 
 use Drupal\Component\Serialization\Yaml;
 use Drush\Commands\DrushCommands as CoreCommands;
@@ -51,6 +51,7 @@ class DrushCommands extends CoreCommands {
       'jacerider/neo_image',
     ];
     $moduleInstall = [
+      'devel',
       'valet',
       'neo',
       'neo_icon',
