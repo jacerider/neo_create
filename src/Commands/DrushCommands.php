@@ -145,6 +145,7 @@ class DrushCommands extends CoreCommands {
           return $port['name'] === 'Vite';
         }))) {
           $this->io->info('Updating .ddev config to expose Vite port 5173.');
+          $this->io->success('You may need to restart DDEV for the changes to take effect.');
           $file['web_extra_exposed_ports'][] = [
             'name' => 'Vite',
             'container_port' => 5173,
@@ -173,6 +174,8 @@ class DrushCommands extends CoreCommands {
     $this->io->info('Remove "neo_create" module.');
     $shell = Drush::shell('composer remove jacerider/neo_create', $this->getRoot());
     $shell->run();
+
+    $this->io->success('Success! To enter DEV mode run "npm start".');
   }
 
   /**
