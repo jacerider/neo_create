@@ -159,6 +159,14 @@ class DrushCommands extends CoreCommands {
       $this->io->error('<error>' . $e->getMessage() . '</error>');
     }
 
+    $this->io->info('Install node modules.');
+    $shell = Drush::shell('npm install', $this->getRoot());
+    $shell->run();
+
+    $this->io->info('Build neo assets.');
+    $shell = Drush::shell('npm run deploy', $this->getRoot());
+    $shell->run();
+
     $this->io->info('Uninstall "neo_create" module.');
     $shell = Drush::shell('drush pmu neo_create', $this->getRoot());
     $shell->run();
