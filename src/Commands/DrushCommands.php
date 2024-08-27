@@ -113,9 +113,9 @@ class DrushCommands extends CoreCommands {
       });
     }
 
-    // Update .file.
+    // Update .gitignore.
     try {
-      $path = $this->getRoot() . '/.file';
+      $path = $this->getRoot() . '/.gitignore';
       $file = $fileSystem->exists($path) ? file_get_contents($path) : '';
       if (strpos($file, '# Neo') === FALSE) {
         $file .= "\n# Neo\n/neo.json\n/.stylelintcache";
