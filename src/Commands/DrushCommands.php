@@ -43,6 +43,7 @@ class DrushCommands extends CoreCommands {
    */
   public function neoCreate() {
     $fileSystem = new Filesystem();
+    $debug = FALSE;
     $composerRequire = [
       'drupal/devel',
       'jacerider/valet',
@@ -76,13 +77,16 @@ class DrushCommands extends CoreCommands {
     // Phase 1 Commands.
     $color = $this->io()->ask('What is your primary HEX color? (Default: #2780e3)', '#2780e3');
     $commands = [];
-    $commands[] = 'composer config minimum-stability dev';
-    $commands[] = 'composer require ' . implode(' ', $composerRequire);
-    $commands[] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require augustash/vscode-drupal && composer vscode-setup -- --color=' . $color;
-    foreach ($commands as $command) {
+    $commands['Setting minimum-stability to dev.'] = 'composer config minimum-stability dev';
+    $commands['Installing modules and themes.'] = 'composer require ' . implode(' ', $composerRequire);
+    $commands['Configuring VScode for Drupal. '] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require augustash/vscode-drupal && composer vscode-setup -- --color=' . $color;
+    foreach ($commands as $message => $command) {
+      $this->io->info($message);
       $shell = Drush::shell($command, $this->getRoot());
       $shell->run(function ($type, $buffer) {
-        $this->output()->writeln('-- ' . $buffer);
+        if ($debug) {
+          $this->output()->writeln('-- ' . $buffer);
+        }
       });
     }
 
@@ -91,6 +95,7 @@ class DrushCommands extends CoreCommands {
         $to = $this->appRoot . '/themes/' . $theme;
         $from = $this->appRoot . '/themes/contrib/neo_theme/neo_base/install/neo/' . $theme;
         if (!$fileSystem->exists($to) && $fileSystem->exists($from)) {
+          $this->io->info('Creating "' . $theme . '" theme.');
           $fileSystem->mirror($from, $to);
           $fileSystem->rename($to . '/' . $theme . '.info.neo.yml', $to . '/' . $theme . '.info.yml');
         }
@@ -102,15 +107,18 @@ class DrushCommands extends CoreCommands {
 
     // Phase 2 Commands.
     $commands = [];
-    $commands[] = 'drush en ' . implode(' ', $moduleInstall) . ' -y';
-    $commands[] = 'drush theme:enable ' . implode(' ', $themeInstall) . ' -y';
-    $commands[] = 'drush config:set system.theme default front -y';
-    $commands[] = 'drush config:set system.theme admin back -y';
-    $commands[] = 'drush neo-install';
-    foreach ($commands as $command) {
+    $commands['Enabling modules.'] = 'drush en ' . implode(' ', $moduleInstall) . ' -y';
+    $commands['Enabling themes.'] = 'drush theme:enable ' . implode(' ', $themeInstall) . ' -y';
+    $commands['Setting default frontend theme.'] = 'drush config:set system.theme default front -y';
+    $commands['Setting default backend theme.'] = 'drush config:set system.theme admin back -y';
+    $commands['Installing Neo development environment.'] = 'drush neo-install';
+    foreach ($commands as $message => $command) {
+      $this->io->info($message);
       $shell = Drush::shell($command, $this->getRoot());
       $shell->run(function ($type, $buffer) {
-        $this->output()->writeln('-- ' . $buffer);
+        if ($debug) {
+          $this->output()->writeln('-- ' . $buffer);
+        }
       });
     }
 
@@ -119,6 +127,7 @@ class DrushCommands extends CoreCommands {
       $path = $this->getRoot() . '/.gitignore';
       $file = $fileSystem->exists($path) ? file_get_contents($path) : '';
       if (strpos($file, '# Neo') === FALSE) {
+        $this->io->info('Updating .gitignore.');
         $file .= "\n# Neo\n/neo.json\n/.stylelintcache";
         $fileSystem->dumpFile($path, $file);
       }
@@ -135,6 +144,7 @@ class DrushCommands extends CoreCommands {
         if (!isset($file['web_extra_exposed_ports']) || empty(array_filter($file['web_extra_exposed_ports'], function ($port) {
           return $port['name'] === 'Vite';
         }))) {
+          $this->io->info('Updating .ddev config to expose Vite port 5173.');
           $file['web_extra_exposed_ports'][] = [
             'name' => 'Vite',
             'container_port' => 5173,
@@ -149,8 +159,10 @@ class DrushCommands extends CoreCommands {
       $this->io->error('<error>' . $e->getMessage() . '</error>');
     }
 
+    $this->io->info('Uninstall "neo_create" module.');
     $shell = Drush::shell('drush pmu neo_create', $this->getRoot());
     $shell->run();
+    $this->io->info('Remove "neo_create" module.');
     $shell = Drush::shell('composer remove jacerider/neo_create', $this->getRoot());
     $shell->run();
   }
