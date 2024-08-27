@@ -83,7 +83,7 @@ class DrushCommands extends CoreCommands {
     foreach ($commands as $message => $command) {
       $this->io->info($message);
       $shell = Drush::shell($command, $this->getRoot());
-      $shell->run(function ($type, $buffer) {
+      $shell->run(function ($type, $buffer) use ($debug) {
         if ($debug) {
           $this->output()->writeln('-- ' . $buffer);
         }
@@ -115,7 +115,7 @@ class DrushCommands extends CoreCommands {
     foreach ($commands as $message => $command) {
       $this->io->info($message);
       $shell = Drush::shell($command, $this->getRoot());
-      $shell->run(function ($type, $buffer) {
+      $shell->run(function ($type, $buffer) use ($debug) {
         if ($debug) {
           $this->output()->writeln('-- ' . $buffer);
         }
