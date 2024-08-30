@@ -159,22 +159,10 @@ class DrushCommands extends CoreCommands {
 
     // Update .ddev.
     try {
-      $path = $this->getRoot() . '/.ddev/config.yaml';
-      if ($fileSystem->exists($path)) {
-        $file = Yaml::decode(file_get_contents($path));
-        if (!isset($file['web_extra_exposed_ports']) || empty(array_filter($file['web_extra_exposed_ports'], function ($port) {
-          return $port['name'] === 'Vite';
-        }))) {
-          $this->io->info('Updating .ddev config to expose Vite port 5173.');
-          $this->io->success('You may need to restart DDEV for the changes to take effect.');
-          $file['web_extra_exposed_ports'][] = [
-            'name' => 'Vite',
-            'container_port' => 5173,
-            'http_port' => 5172,
-            'https_port' => 5173,
-          ];
-        }
-        $fileSystem->dumpFile($path, Yaml::encode($file));
+      $path = $this->getRoot() . '/.ddev/nginx/neo.conf';
+      if (!$fileSystem->exists($path)) {
+        $data = "location /neo-assets/ {\n    proxy_pass http://127.0.0.1:5173/neo-assets/;\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade \$http_upgrade;\n    proxy_set_header Connection \"upgrade\";\n}";
+        $fileSystem->dumpFile($path, $data);
       }
     }
     catch (\Error $e) {
