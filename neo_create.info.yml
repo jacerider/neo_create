@@ -2,5 +2,5 @@ name: 'Neo | Create'
 type: module
 description: 'Provides quick install of Neo suite of modules and themes.'
 package: Neo
-version: 0.0.0
+version: 1.0.1
 core_version_requirement: ^10.3 || ^11
