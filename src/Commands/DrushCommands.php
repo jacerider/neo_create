@@ -161,7 +161,7 @@ class DrushCommands extends CoreCommands {
     try {
       $path = $this->getRoot() . '/.ddev/nginx/neo.conf';
       if (!$fileSystem->exists($path)) {
-        $data = "location /neo-assets/ {\n    proxy_pass http://127.0.0.1:5173/neo-assets/;\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade \$http_upgrade;\n    proxy_set_header Connection \"upgrade\";\n}";
+        $data = "location /neo-assets/ {\n    rewrite ^(.*)\.neo$ $1 break;\n    proxy_pass http://127.0.0.1:5173/neo-assets/;\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade \$http_upgrade;\n    proxy_set_header Connection \"upgrade\";\n}";
         $fileSystem->dumpFile($path, $data);
       }
     }
