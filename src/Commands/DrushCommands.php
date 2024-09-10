@@ -172,7 +172,7 @@ class DrushCommands extends CoreCommands {
     $shell = Drush::shell('npm install', $this->getRoot());
     $shell->run();
 
-    $this->io->info('Build neo assets.');
+    $this->io->info('Build Neo assets.');
     $shell = Drush::shell('npm run deploy', $this->getRoot());
     $shell->run();
 
