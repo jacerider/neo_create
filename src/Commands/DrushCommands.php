@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\neo_create\Commands;
 
-use Drupal\Component\Serialization\Yaml;
 use Drush\Commands\DrushCommands as CoreCommands;
 use Drush\Drush;
 use Symfony\Component\Filesystem\Filesystem;
