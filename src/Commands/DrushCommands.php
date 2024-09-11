@@ -60,6 +60,8 @@ class DrushCommands extends CoreCommands {
       'jacerider/neo_theme',
       'jacerider/neo_loader',
       'jacerider/neo_image',
+      'jacerider/neo_favicon',
+      'jacerider/neo_config_flow',
     ];
     $moduleInstall = [
       'devel',
@@ -81,6 +83,8 @@ class DrushCommands extends CoreCommands {
       'neo_loader',
       'neo_image',
       'neo_twig',
+      'neo_favicon',
+      'neo_config_flow',
     ];
     $themeInstall = [
       'neo_base',
