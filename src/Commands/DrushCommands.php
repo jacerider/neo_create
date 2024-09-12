@@ -99,7 +99,7 @@ class DrushCommands extends CoreCommands {
     $commands = [];
     $commands['Setting minimum-stability to dev.'] = 'composer config minimum-stability dev';
     $commands['Installing modules and themes.'] = 'composer require ' . implode(' ', $composerRequire);
-    $commands['Configuring VScode for Drupal. '] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require augustash/vscode-drupal && composer vscode-setup -- --color=' . $color;
+    $commands['Configuring VScode for Drupal. '] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require jacerider/vscode-neo && composer vscode-setup -- --color=' . $color;
     foreach ($commands as $message => $command) {
       $this->io->info($message);
       $shell = Drush::shell($command, $this->getRoot());
