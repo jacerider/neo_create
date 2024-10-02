@@ -54,12 +54,14 @@ class DrushCommands extends CoreCommands {
       'drupal/disable_user_1_edit',
       'drupal/reroute_email',
       'drupal/big_pipe_sessionless',
+      'drupal/linkit',
       'jacerider/neo',
       'jacerider/neo_theme',
       'jacerider/neo_loader',
       'jacerider/neo_image',
       'jacerider/neo_favicon',
       'jacerider/neo_config_flow',
+      'jacerider/neo_toolbar',
     ];
     $moduleInstall = [
       'devel',
@@ -71,6 +73,7 @@ class DrushCommands extends CoreCommands {
       'disable_user_1_edit',
       'reroute_email',
       'big_pipe_sessionless',
+      'linkit',
       'neo',
       'neo_icon',
       'neo_icon_admin',
@@ -81,6 +84,7 @@ class DrushCommands extends CoreCommands {
       'neo_twig',
       'neo_favicon',
       'neo_config_flow',
+      'neo_toolbar',
     ];
     $themeInstall = [
       'neo_base',
