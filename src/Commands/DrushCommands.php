@@ -42,7 +42,7 @@ class DrushCommands extends CoreCommands {
    */
   public function neoCreate() {
     $fileSystem = new Filesystem();
-    $debug = TRUE;
+    $debug = FALSE;
     $composerRequire = [
       'drupal/devel',
       'kint-php/kint',
