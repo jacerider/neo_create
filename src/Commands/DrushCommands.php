@@ -24,7 +24,7 @@ class DrushCommands extends CoreCommands {
    * {@inheritDoc}
    */
   public function __construct(
-    private readonly string $appRoot
+    private readonly string $appRoot,
   ) {
     parent::__construct();
   }
@@ -42,7 +42,7 @@ class DrushCommands extends CoreCommands {
    */
   public function neoCreate() {
     $fileSystem = new Filesystem();
-    $debug = FALSE;
+    $debug = TRUE;
     $composerRequire = [
       'drupal/devel',
       'kint-php/kint',
@@ -198,12 +198,14 @@ class DrushCommands extends CoreCommands {
     $shell = Drush::shell('npm run deploy', $this->getRoot());
     $shell->run();
 
-    $this->io->info('Uninstall "neo_create" module.');
-    $shell = Drush::shell('drush pmu neo_create', $this->getRoot());
-    $shell->run();
-    $this->io->info('Remove "neo_create" module.');
-    $shell = Drush::shell('composer remove jacerider/neo_create', $this->getRoot());
-    $shell->run();
+    if (!$debug) {
+      $this->io->info('Uninstall "neo_create" module.');
+      $shell = Drush::shell('drush pmu neo_create', $this->getRoot());
+      $shell->run();
+      $this->io->info('Remove "neo_create" module.');
+      $shell = Drush::shell('composer remove jacerider/neo_create', $this->getRoot());
+      $shell->run();
+    }
 
     $this->io->success('If using VScode, please visit your extentions tab and enable both the "Drupal Extension Pack" and "Drupal Neo Extention Pack".');
 
