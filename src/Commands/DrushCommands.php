@@ -184,18 +184,6 @@ class DrushCommands extends CoreCommands {
       $this->io->error('<error>' . $e->getMessage() . '</error>');
     }
 
-    // Update .ddev.
-    try {
-      $path = $this->getRoot() . '/.ddev/nginx/neo.conf';
-      if (!$fileSystem->exists($path)) {
-        $data = "location /neo-assets/ {\n    rewrite ^(.*)\.neo$ $1 break;\n    proxy_pass http://127.0.0.1:5173/neo-assets/;\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade \$http_upgrade;\n    proxy_set_header Connection \"upgrade\";\n}";
-        $fileSystem->dumpFile($path, $data);
-      }
-    }
-    catch (\Error $e) {
-      $this->io->error('<error>' . $e->getMessage() . '</error>');
-    }
-
     $this->io->info('Install node modules.');
     $shell = Drush::shell($commandPrefix . 'npm install', $this->getRoot());
     $shell->run();
@@ -215,7 +203,12 @@ class DrushCommands extends CoreCommands {
 
     $this->io->success('If using VScode, please visit your extentions tab and enable both the "Drupal Extension Pack" and "Drupal Neo Extention Pack".');
 
-    $this->io->success('Success! To enter DEV mode run "npm start".');
+    if (getenv('DDEV_PROJECT')) {
+      $this->io->success('Success! To enter DEV mode run "ddev ssh && npm start".');
+    }
+    else {
+      $this->io->success('Success! To enter DEV mode run "npm start".');
+    }
   }
 
   /**
