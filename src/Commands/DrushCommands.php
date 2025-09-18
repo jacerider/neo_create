@@ -184,19 +184,19 @@ class DrushCommands extends CoreCommands {
       $this->io->error('<error>' . $e->getMessage() . '</error>');
     }
 
-    $this->io->info('Install node modules.');
+    $this->io->info('Installing Node modules...');
     $shell = Drush::shell($commandPrefix . 'npm install', $this->getRoot());
     $shell->run();
 
-    $this->io->info('Build Neo assets.');
+    $this->io->info('Building Neo assets...');
     $shell = Drush::shell($commandPrefix . 'npm run deploy', $this->getRoot());
     $shell->run();
 
     if (!$debug) {
-      $this->io->info('Uninstall "neo_create" module.');
+      $this->io->info('Uninstalling "neo_create" module...');
       $shell = Drush::shell($commandPrefix . 'drush pmu neo_create', $this->getRoot());
       $shell->run();
-      $this->io->info('Remove "neo_create" module.');
+      $this->io->info('Removing "neo_create" module...');
       $shell = Drush::shell($commandPrefix . 'ddev exec composer remove jacerider/neo_create', $this->getRoot());
       $shell->run();
     }
@@ -204,7 +204,7 @@ class DrushCommands extends CoreCommands {
     $this->io->success('If using VScode, please visit your extentions tab and enable both the "Drupal Extension Pack" and "Drupal Neo Extention Pack".');
 
     if (getenv('DDEV_PROJECT')) {
-      $this->io->success('Success! To enter DEV mode run "ddev ssh && npm start".');
+      $this->io->success('Success! Please restart DDEV before continueing. To enter DEV mode run "ddev ssh && npm start".');
     }
     else {
       $this->io->success('Success! To enter DEV mode run "npm start".');
