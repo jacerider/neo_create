@@ -125,7 +125,7 @@ class DrushCommands extends CoreCommands {
     $color = $this->io()->ask('What is your primary HEX color? (Default: #2780e3)', '#2780e3');
     $commands = [];
     $commands['Setting minimum-stability to dev.'] = 'composer config minimum-stability dev';
-    $commands['Installing modules and themes.'] = 'COMPOSER_ALLOW_PLUGINS=1 composer require ' . implode(' ', $composerRequire);
+    $commands['Installing modules and themes.'] = 'composer require ' . implode(' ', $composerRequire);
     $commands['Configuring VScode for Drupal. '] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require --dev jacerider/vscode-neo && composer vscode-setup -- --color=' . $color;
     $commands['Installing GrumpPHP.'] = 'composer require --dev jacerider/grumphp-drupal';
     foreach ($commands as $message => $command) {
@@ -184,19 +184,19 @@ class DrushCommands extends CoreCommands {
       $this->io->error('<error>' . $e->getMessage() . '</error>');
     }
 
-    $this->io->info('Installing Node modules...');
+    $this->io->info('Install node modules.');
     $shell = Drush::shell($commandPrefix . 'npm install', $this->getRoot());
     $shell->run();
 
-    $this->io->info('Building Neo assets...');
+    $this->io->info('Build Neo assets.');
     $shell = Drush::shell($commandPrefix . 'npm run deploy', $this->getRoot());
     $shell->run();
 
     if (!$debug) {
-      $this->io->info('Uninstalling "neo_create" module...');
+      $this->io->info('Uninstall "neo_create" module.');
       $shell = Drush::shell($commandPrefix . 'drush pmu neo_create', $this->getRoot());
       $shell->run();
-      $this->io->info('Removing "neo_create" module...');
+      $this->io->info('Remove "neo_create" module.');
       $shell = Drush::shell($commandPrefix . 'ddev exec composer remove jacerider/neo_create', $this->getRoot());
       $shell->run();
     }
@@ -204,7 +204,7 @@ class DrushCommands extends CoreCommands {
     $this->io->success('If using VScode, please visit your extentions tab and enable both the "Drupal Extension Pack" and "Drupal Neo Extention Pack".');
 
     if (getenv('DDEV_PROJECT')) {
-      $this->io->success('Success! Please restart DDEV before continueing. To enter DEV mode run "ddev ssh && npm start".');
+      $this->io->success('Success! To enter DEV mode run "ddev ssh && npm start".');
     }
     else {
       $this->io->success('Success! To enter DEV mode run "npm start".');
