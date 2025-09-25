@@ -170,6 +170,27 @@ class DrushCommands extends CoreCommands {
       });
     }
 
+    // Phase 3 Configurations.
+    $config = [];
+    $config['file.settings'] = [
+      'filename_sanitization.transliterate' => '1',
+      'filename_sanitization.replace_whitespace' => '1',
+      'filename_sanitization.replace_non_alphanumeric' => '1',
+      'filename_sanitization.deduplicate_separators' => '1',
+      'filename_sanitization.lowercase' => '1',
+    ];
+    foreach ($config as $name => $values) {
+      foreach ($values as $key => $value) {
+        $this->io->info('Setting config ' . $name . '.' . $key . ' to ' . $value . '.');
+        $shell = Drush::shell($commandPrefix . 'drush config:set ' . $name . ' ' . $key . ' ' . $value . ' -y', $this->getRoot());
+        $shell->run(function ($type, $buffer) use ($debug) {
+          if ($debug) {
+            $this->output()->writeln('-- ' . $buffer);
+          }
+        });
+      }
+    }
+
     // Update .gitignore.
     try {
       $path = $this->getRoot() . '/.gitignore';
