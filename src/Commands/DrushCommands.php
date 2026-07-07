@@ -70,7 +70,9 @@ class DrushCommands extends CoreCommands {
       'jacerider/neo_config_flow',
       'jacerider/neo_site_settings',
       'jacerider/neo_toolbar',
+      'jacerider/neo_form',
       'jacerider/neo_alchemist',
+      'jacerider/neo_animate',
     ];
     $moduleInstall = [
       'devel',
