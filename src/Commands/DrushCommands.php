@@ -125,11 +125,21 @@ class DrushCommands extends CoreCommands {
 
     // Phase 1 Commands.
     $color = $this->io()->ask('What is your primary HEX color? (Default: #2780e3)', '#2780e3');
+    $installGrumphp = $this->io()->confirm(
+      'Install PHP code standards tooling (GrumPHP)?',
+      TRUE
+    );
+    $installClaudeHook = $this->io()->confirm(
+      'Set up the personal Claude Code phpcs hook?',
+      TRUE
+    );
     $commands = [];
     $commands['Setting minimum-stability to dev.'] = 'composer config minimum-stability dev';
     $commands['Installing modules and themes.'] = 'composer require ' . implode(' ', $composerRequire);
     $commands['Configuring VScode for Drupal. '] = 'composer config --json --merge extra.installer-paths \'{".vscode/extensions/{$name}": ["type:vscode-extension"]}\' && composer config --json --merge extra.installer-types \'["vscode-extension"]\' && composer config scripts.vscode-setup "VscodeDrupal\\Install::postPackageInstall" && composer require --dev jacerider/vscode-neo && composer vscode-setup -- --color=' . $color;
-    $commands['Installing GrumpPHP.'] = 'composer require --dev jacerider/grumphp-drupal';
+    if ($installGrumphp) {
+      $commands['Installing GrumpPHP.'] = 'composer require --dev jacerider/grumphp-drupal';
+    }
     foreach ($commands as $message => $command) {
       $this->io->info($message);
       $shell = Drush::shell($commandPrefix . $command, $this->getRoot());
@@ -161,7 +171,11 @@ class DrushCommands extends CoreCommands {
     $commands['Enabling themes.'] = 'drush theme:enable ' . implode(' ', $themeInstall) . ' -y';
     $commands['Setting default frontend theme.'] = 'drush config:set system.theme default front -y';
     $commands['Setting default backend theme.'] = 'drush config:set system.theme admin back -y';
-    $commands['Installing Neo development environment.'] = 'drush neo-install';
+    $neoInstall = 'drush neo-install';
+    if ($installClaudeHook) {
+      $neoInstall .= ' --claude';
+    }
+    $commands['Installing Neo development environment.'] = $neoInstall;
     foreach ($commands as $message => $command) {
       $this->io->info($message);
       $shell = Drush::shell($commandPrefix . $command, $this->getRoot());
@@ -199,7 +213,7 @@ class DrushCommands extends CoreCommands {
       $file = $fileSystem->exists($path) ? file_get_contents($path) : '';
       if (strpos($file, '# Neo') === FALSE) {
         $this->io->info('Updating .gitignore.');
-        $file .= "\n# Neo\n/neo.json\n/tsconfig.neo.json\n/.stylelintcache\n!/config/files/*";
+        $file .= "\n# Neo\n/neo.json\n/tsconfig.neo.json\n/.stylelintcache\n!/config/files/*\n";
         $fileSystem->dumpFile($path, $file);
       }
     }
